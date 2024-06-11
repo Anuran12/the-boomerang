@@ -5,24 +5,19 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv/config");
 
-app.use(cors());
-app.options("*", cors());
+// Configure CORS
+const corsOptions = {
+  origin: "https://theboomerang.in",
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://theboomerang.in");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  next();
-});
-
-//middleware
+// Middleware
 app.use(bodyParser.json());
 app.use(express.json());
 
-//Routes
+// Routes
 const userRoutes = require("./routes/user.js");
 const categoryRoutes = require("./routes/categories");
 const subCatRoutes = require("./routes/subCat.js");
@@ -54,7 +49,7 @@ app.use(`/api/orders`, ordersSchema);
 app.use(`/api/homeBanner`, homeBannerSchema);
 app.use(`/api/search`, searchRoutes);
 
-//Database
+// Database
 mongoose
   .connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
@@ -62,7 +57,7 @@ mongoose
   })
   .then(() => {
     console.log("Database Connection is ready...");
-    //Server
+    // Server
     app.listen(process.env.PORT, () => {
       console.log(`server is running http://localhost:${process.env.PORT}`);
     });
