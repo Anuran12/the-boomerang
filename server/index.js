@@ -5,13 +5,22 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv/config");
 
-// Configure CORS
+// CORS Configuration with logging
 const corsOptions = {
   origin: "https://theboomerang.in",
   optionsSuccessStatus: 200,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
+
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
+
+// Logging middleware to check requests
+app.use((req, res, next) => {
+  console.log(`Request Method: ${req.method}, Request URL: ${req.url}`);
+  next();
+});
 
 // Middleware
 app.use(bodyParser.json());
@@ -65,3 +74,8 @@ mongoose
   .catch((err) => {
     console.log(err);
   });
+
+// Default route for testing
+app.get("/", (req, res) => {
+  res.send("CORS Test Endpoint");
+});
