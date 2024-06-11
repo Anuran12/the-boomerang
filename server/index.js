@@ -2,11 +2,15 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-// const cors = require('cors');
+const cors = require("cors");
 require("dotenv/config");
 
-// app.use(cors());
-// app.options('*', cors())
+const corsOptions = {
+  origin: "https://theboomerang.in",
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 //middleware
 app.use(bodyParser.json());
