@@ -5,12 +5,18 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv/config");
 
-const corsOptions = {
-  origin: "https://theboomerang.in",
-  optionsSuccessStatus: 200,
-};
+app.use(cors());
+app.options("*", cors());
 
-app.use(cors(corsOptions));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://theboomerang.in");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  next();
+});
 
 //middleware
 app.use(bodyParser.json());
