@@ -1,34 +1,33 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import './App.css';
-import './responsive.css';
+import "./App.css";
+import "./responsive.css";
 import { BrowserRouter, Route, Router, Routes, json } from "react-router-dom";
 import Home from "./Pages/Home";
 import Listing from "./Pages/Listing";
 import ProductDetails from "./Pages/ProductDetails";
 import Header from "./Components/Header";
 import { createContext, useEffect, useState } from "react";
-import axios from 'axios';
+import axios from "axios";
 import Footer from "./Components/Footer";
 import ProductModal from "./Components/ProductModal";
 import Cart from "./Pages/Cart";
 import SignIn from "./Pages/SignIn";
 import SignUp from "./Pages/SignUp";
 import MyList from "./Pages/MyList";
-import Checkout from './Pages/Checkout';
-import Orders from './Pages/Orders';
-import MyAccount from './Pages/MyAccount';
-import SearchPage from './Pages/Search';
+import Checkout from "./Pages/Checkout";
+import Orders from "./Pages/Orders";
+import MyAccount from "./Pages/MyAccount";
+import SearchPage from "./Pages/Search";
 
 import { fetchDataFromApi, postData } from "./utils/api";
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 const MyContext = createContext();
 
 function App() {
-
   const [countryList, setCountryList] = useState([]);
-  const [selectedCountry, setselectedCountry] = useState('');
+  const [selectedCountry, setselectedCountry] = useState("");
   const [isOpenProductModal, setisOpenProductModal] = useState(false);
   const [isHeaderFooterShow, setisHeaderFooterShow] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
@@ -44,67 +43,61 @@ function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const [alertBox, setAlertBox] = useState({
-    msg: '',
+    msg: "",
     error: false,
-    open: false
-  })
+    open: false,
+  });
 
   const [user, setUser] = useState({
     name: "",
     email: "",
-    userId: ""
-  })
-
-
+    userId: "",
+  });
 
   useEffect(() => {
-    getCountry("https://countriesnow.space/api/v0.1/countries/");
+    getCountry("https://countriesnow.space/api/v0.1/countries/states");
 
     fetchDataFromApi("/api/category").then((res) => {
       setCategoryData(res.categoryList);
-    })
+    });
 
     fetchDataFromApi("/api/subCat?page=1&perPage=7").then((res) => {
       setsubCategoryData(res.subCategoryList);
-    })
+    });
 
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user?.userId !== "" && user?.userId !== undefined && user?.userId !== null) {
+    if (
+      user?.userId !== "" &&
+      user?.userId !== undefined &&
+      user?.userId !== null
+    ) {
       fetchDataFromApi(`/api/cart?userId=${user?.userId}`).then((res) => {
-        setCartData(res)
+        setCartData(res);
       });
-
     }
-
 
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
 
-
     const location = localStorage.getItem("location");
     if (location !== null && location !== "" && location !== undefined) {
-      setselectedCountry(location)
+      setselectedCountry(location);
     }
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
-
-
-
   }, []);
-
 
   const getCartData = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     fetchDataFromApi(`/api/cart?userId=${user?.userId}`).then((res) => {
-      setCartData(res)
+      setCartData(res);
     });
-  }
-
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -115,38 +108,39 @@ function App() {
       const userData = JSON.parse(localStorage.getItem("user"));
 
       setUser(userData);
-
     } else {
       setIsLogin(false);
     }
   }, [isLogin]);
 
-
   const openProductDetailsModal = (id, status) => {
     fetchDataFromApi(`/api/products/${id}`).then((res) => {
       setProductData(res);
       setisOpenProductModal(status);
-    })
-  }
+    });
+  };
 
   const getCountry = async (url) => {
     const responsive = await axios.get(url).then((res) => {
-      setCountryList(res.data.data)
-    })
-  }
+      // setCountryList(res.data.data);
+      // console.log(res.data.data);
+      const india = res.data.data.find((name) => name.name === "India");
+      setCountryList(india.states);
+      console.log(india.states);
+    });
+  };
 
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
     setAlertBox({
-      open: false
+      open: false,
     });
   };
 
   const addToCart = (data) => {
-
     if (isLogin === true) {
       setAddingInCart(true);
       postData(`/api/cart/add`, data).then((res) => {
@@ -154,36 +148,31 @@ function App() {
           setAlertBox({
             open: true,
             error: false,
-            msg: "Item is added in the cart"
-          })
+            msg: "Item is added in the cart",
+          });
 
           setTimeout(() => {
             setAddingInCart(false);
           }, 1000);
 
           getCartData();
-
-        }
-        else {
+        } else {
           setAlertBox({
             open: true,
             error: true,
-            msg: res.msg
-          })
+            msg: res.msg,
+          });
           setAddingInCart(false);
         }
-
-      })
-    }
-    else {
+      });
+    } else {
       setAlertBox({
         open: true,
         error: true,
-        msg: "Please login first"
-      })
+        msg: "Please login first",
+      });
     }
-
-  }
+  };
 
   const values = {
     countryList,
@@ -212,38 +201,48 @@ function App() {
     setSearchData,
     windowWidth,
     isOpenNav,
-    setIsOpenNav
-  }
+    setIsOpenNav,
+  };
 
   return (
     <BrowserRouter>
       <MyContext.Provider value={values}>
-
-
-        <Snackbar open={alertBox.open} autoHideDuration={6000} onClose={handleClose} className="snackbar">
+        <Snackbar
+          open={alertBox.open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          className="snackbar"
+        >
           <Alert
             onClose={handleClose}
             autoHideDuration={6000}
-            severity={alertBox.error === false ? "success" : 'error'}
+            severity={alertBox.error === false ? "success" : "error"}
             variant="filled"
-            sx={{ width: '100%' }}
+            sx={{ width: "100%" }}
           >
             {alertBox.msg}
           </Alert>
         </Snackbar>
 
-
-        {
-          isHeaderFooterShow === true && <Header />
-        }
-
-
+        {isHeaderFooterShow === true && <Header />}
 
         <Routes>
           <Route path="/" exact={true} element={<Home />} />
-          <Route path="/products/category/:id" exact={true} element={<Listing />} />
-          <Route path="/products/subCat/:id" exact={true} element={<Listing />} />
-          <Route exact={true} path="/product/:id" element={<ProductDetails />} />
+          <Route
+            path="/products/category/:id"
+            exact={true}
+            element={<Listing />}
+          />
+          <Route
+            path="/products/subCat/:id"
+            exact={true}
+            element={<Listing />}
+          />
+          <Route
+            exact={true}
+            path="/product/:id"
+            element={<ProductDetails />}
+          />
           <Route exact={true} path="/cart" element={<Cart />} />
           <Route exact={true} path="/signIn" element={<SignIn />} />
           <Route exact={true} path="/signUp" element={<SignUp />} />
@@ -253,17 +252,9 @@ function App() {
           <Route exact={true} path="/my-account" element={<MyAccount />} />
           <Route exact={true} path="/search" element={<SearchPage />} />
         </Routes>
-        {
-          isHeaderFooterShow === true && <Footer />
-        }
+        {isHeaderFooterShow === true && <Footer />}
 
-
-
-        {
-          isOpenProductModal === true && <ProductModal data={productData} />
-        }
-
-
+        {isOpenProductModal === true && <ProductModal data={productData} />}
       </MyContext.Provider>
     </BrowserRouter>
   );
@@ -271,4 +262,4 @@ function App() {
 
 export default App;
 
-export { MyContext }
+export { MyContext };
