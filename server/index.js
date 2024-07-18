@@ -14,7 +14,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 
 // Logging middleware to check requests
 app.use((req, res, next) => {
