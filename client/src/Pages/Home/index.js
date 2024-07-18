@@ -1,6 +1,6 @@
 import HomeBanner from "../../Components/HomeBanner";
 import banner1 from "../../assets/images/banner1.gif";
-import banner2 from "../../assets/images/banner2.jpg";
+import banner2 from "../../assets/images/banner2.png";
 import Button from "@mui/material/Button";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import React, { useContext, useEffect, useState } from "react";
