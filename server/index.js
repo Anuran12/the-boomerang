@@ -2,18 +2,18 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const cors = require("cors");
+// const cors = require("cors");
 require("dotenv/config");
 
 // Configure CORS to allow any origin
-const corsOptions = {
-  origin: "*", // Allow any origin
-  optionsSuccessStatus: 200,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+// const corsOptions = {
+//   origin: "*", // Allow any origin
+//   optionsSuccessStatus: 200,
+//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//   allowedHeaders: ["Content-Type", "Authorization"],
+// };
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 // Logging middleware to check requests
 app.use((req, res, next) => {
