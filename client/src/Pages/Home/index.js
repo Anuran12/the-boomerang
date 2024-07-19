@@ -11,8 +11,8 @@ import { Navigation } from "swiper/modules";
 import ProductItem from "../../Components/ProductItem";
 import HomeCat from "../../Components/HomeCat";
 
-import banner3 from "../../assets/images/banner3.jpg";
-import banner4 from "../../assets/images/banner4.jpg";
+import banner3 from "../../assets/images/banner3.png";
+import banner4 from "../../assets/images/banner4.png";
 
 import { MyContext } from "../../App";
 import { fetchDataFromApi } from "../../utils/api";
