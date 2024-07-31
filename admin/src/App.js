@@ -48,7 +48,7 @@ function App() {
   });
 
   const [baseUrl, setBaseUrl] = useState(
-    "https://the-boomerang-admin.vercel.app"
+    "https://the-boomerang-server.vercel.app"
   );
 
   const [progress, setProgress] = useState(0);
