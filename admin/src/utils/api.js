@@ -11,39 +11,11 @@ export const fetchDataFromApi = async (url) => {
 };
 
 export const uploadImage = async (url, formData) => {
-  try {
-    const response = await axios.post(
-      process.env.REACT_APP_BASE_URL + url,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        timeout: 30000, // Set a timeout of 30 seconds
-      }
-    );
-
-    // Handle different status codes if necessary
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      console.error(`Unexpected response status: ${response.status}`);
-      throw new Error(`Unexpected response status: ${response.status}`);
-    }
-  } catch (error) {
-    // Handle specific error cases
-    if (error.response) {
-      // Server responded with a status code outside of 2xx range
-      console.error(`Server responded with status: ${error.response.status}`);
-    } else if (error.request) {
-      // No response received
-      console.error("No response received from server");
-    } else {
-      // Error setting up request
-      console.error("Error setting up request:", error.message);
-    }
-    throw error; // Rethrow error for further handling if necessary
-  }
+  const { res } = await axios.post(
+    process.env.REACT_APP_BASE_URL + url,
+    formData
+  );
+  return res;
 };
 
 export const postData = async (url, formData) => {
