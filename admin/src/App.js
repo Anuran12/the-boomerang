@@ -47,7 +47,9 @@ function App() {
     userId: "",
   });
 
-  const [baseUrl, setBaseUrl] = useState("http://localhost:4000");
+  const [baseUrl, setBaseUrl] = useState(
+    "https://the-boomerang-admin.vercel.app"
+  );
 
   const [progress, setProgress] = useState(0);
   const [alertBox, setAlertBox] = useState({
