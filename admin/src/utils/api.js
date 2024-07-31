@@ -17,13 +17,31 @@ export const uploadImage = async (url, formData) => {
       formData,
       {
         headers: {
-          "Content-Type": "multipart/form-data", // Ensure correct content type for file uploads
+          "Content-Type": "multipart/form-data",
         },
+        timeout: 30000, // Set a timeout of 30 seconds
       }
     );
-    return response.data; // Axios response contains data in the 'data' property
+
+    // Handle different status codes if necessary
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      console.error(`Unexpected response status: ${response.status}`);
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
   } catch (error) {
-    console.error("Error uploading image:", error);
+    // Handle specific error cases
+    if (error.response) {
+      // Server responded with a status code outside of 2xx range
+      console.error(`Server responded with status: ${error.response.status}`);
+    } else if (error.request) {
+      // No response received
+      console.error("No response received from server");
+    } else {
+      // Error setting up request
+      console.error("Error setting up request:", error.message);
+    }
     throw error; // Rethrow error for further handling if necessary
   }
 };
