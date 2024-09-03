@@ -6,14 +6,14 @@ const cors = require("cors");
 require("dotenv/config");
 
 // Configure CORS to allow any origin
+const corsOptions = {
+  origin: "*", // Allow any origin
+  optionsSuccessStatus: 200,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
 
-app.use(
-  cors({
-    origin: "*", // Or '*', to allow all origins
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(cors(corsOptions));
 
 // Logging middleware to check requests
 app.use((req, res, next) => {
@@ -42,8 +42,11 @@ const homeBannerSchema = require("./routes/homeBanner.js");
 const searchRoutes = require("./routes/search.js");
 
 app.use("/api/user", userRoutes);
+app.use("/uploads", express.static("uploads"));
+app.use(`/api/category`, categoryRoutes);
 app.use(`/api/subCat`, subCatRoutes);
 app.use(`/api/products`, productRoutes);
+app.use(`/api/imageUpload`, imageUploadRoutes);
 app.use(`/api/productWeight`, productWeightRoutes);
 app.use(`/api/productRAMS`, productRAMSRoutes);
 app.use(`/api/productSIZE`, productSIZESRoutes);
