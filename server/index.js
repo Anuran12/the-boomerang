@@ -9,7 +9,7 @@ require("dotenv/config");
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // Or '*', to allow all origins
+    origin: "*", // Or '*', to allow all origins
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
